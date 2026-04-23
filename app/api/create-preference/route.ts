@@ -7,12 +7,14 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    // 🔐 Cliente Mercado Pago
     const client = new MercadoPagoConfig({
       accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
     });
 
     const preference = new Preference(client);
 
+    // 🧾 Crear preferencia
     const response = await preference.create({
       body: {
         items: body.items.map((item: any) => ({
@@ -21,6 +23,11 @@ export async function POST(req: Request) {
           unit_price: Number(item.price),
           currency_id: "CLP",
         })),
+
+        // 🔥 CLAVE para evitar 403 en producción
+        payer: {
+          email: "oscar.ramosh@gmail.com",
+        },
       },
     });
 
