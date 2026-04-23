@@ -17,13 +17,17 @@ export default function CartDrawer() {
 
       const data = await res.json();
 
-      if (data.id) {
-        window.location.href = `https://www.mercadopago.cl/checkout/v1/redirect?pref_id=${data.id}`;
+      console.log("Respuesta MP:", data); // 👈 útil para debug
+
+      // 🔥 CORREGIDO: usar init_point
+      if (data.init_point) {
+        window.location.href = data.init_point;
       } else {
         alert("Error al iniciar el pago");
       }
+
     } catch (error) {
-      console.error(error);
+      console.error("Error en checkout:", error);
       alert("Error en checkout");
     }
   };
