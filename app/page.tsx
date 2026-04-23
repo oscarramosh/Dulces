@@ -7,7 +7,7 @@ const products: Product[] = [
   {
     id: "1",
     name: "Alfajor de Maicena",
-    price: 2500,
+    price: 2600,
     image: "/alfajor.jpg",
     category: "alfajores",
     description: "Suave, relleno con manjar artesanal",
