@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@/lib/types";
 import { useCart } from "@/context/CartContext";
 
