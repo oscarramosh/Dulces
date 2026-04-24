@@ -1,50 +1,44 @@
-"use client";
-import { useState } from "react";
 import { Product } from "@/lib/types";
-import ProductCard from "./ProductCard";
-
-const categories = [
-  "todos",
-  "alfajores",
-  "empolvados",
-  "chilenitos",
-  "packs",
-];
+import { useCart } from "@/context/CartContext";
 
 export default function Catalog({ products }: { products: Product[] }) {
-  const [filter, setFilter] = useState("todos");
-
-  const filtered =
-    filter === "todos"
-      ? products
-      : products.filter(p => p.category === filter);
+  const { addToCart } = useCart();
 
   return (
-    <section>
-      
-      {/* FILTROS */}
-      <div className="flex gap-2 mb-6 overflow-x-auto">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`px-4 py-1 rounded-full border text-sm transition ${
-              filter === cat
-                ? "bg-amber-600 text-white"
-                : "bg-white hover:bg-gray-100"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+    <div className="grid md:grid-cols-3 gap-8">
+      {products.map(product => (
+        <div
+          key={product.id}
+          className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-4"
+        >
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-56 object-cover mb-4"
+          />
 
-      {/* GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-        {filtered.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </section>
+          <h3 className="font-semibold text-lg mb-1">
+            {product.name}
+          </h3>
+
+          <p className="text-gray-500 text-sm mb-3">
+            {product.description}
+          </p>
+
+          <div className="flex justify-between items-center">
+            <span className="font-bold text-amber-800 text-lg">
+              ${product.price.toLocaleString("es-CL")}
+            </span>
+
+            <button
+              onClick={() => addToCart(product)}
+              className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

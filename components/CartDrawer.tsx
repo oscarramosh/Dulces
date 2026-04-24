@@ -33,7 +33,7 @@ export default function CartDrawer() {
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-2xl p-4 border-l z-50">
+    <div className="fixed right-0 top-0 h-full w-80 bg-white/95 backdrop-blur shadow-2xl p-4 border-l z-50">
       
       <h2 className="text-xl font-serif mb-4">Tu carrito</h2>
 
@@ -74,7 +74,7 @@ export default function CartDrawer() {
 
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="text-red-500 text-xs hover:underline"
+                  className="w-full bg-amber-700 text-white py-3 rounded-xl mt-3 hover:bg-amber-800 transition text-lg"
                 >
                   eliminar
                 </button>

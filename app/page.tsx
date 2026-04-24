@@ -25,21 +25,21 @@ const products: Product[] = [
 export default function Page() {
   return (
     <CartProvider>
-      <main className="bg-amber-50 min-h-screen">
+      <main className="bg-[#fefaf6] min-h-screen">
 
         {/* HERO */}
-        <section className="text-center py-16 px-4">
-          <h1 className="text-5xl font-serif text-amber-900 mb-4">
+        <section className="text-center py-20 px-4">
+          <h1 className="text-5xl md:text-6xl font-serif text-amber-900 mb-4">
             Dulces de Curacaví
           </h1>
 
-          <p className="text-gray-600 max-w-xl mx-auto mb-6">
-            Tradición chilena hecha a mano. Dulces frescos, artesanales y con historia.
+          <p className="text-gray-600 max-w-xl mx-auto mb-8 text-lg">
+            Dulces artesanales chilenos, hechos con tradición y amor.
           </p>
 
           <a
             href="#catalogo"
-            className="bg-amber-700 text-white px-6 py-3 rounded-xl shadow hover:bg-amber-800 transition"
+            className="bg-amber-700 text-white px-8 py-3 rounded-xl shadow-md hover:bg-amber-800 transition text-lg"
           >
             Ver catálogo
           </a>
