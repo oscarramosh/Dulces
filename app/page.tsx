@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Catalog from "@/components/Catalog";
 import CartDrawer from "@/components/CartDrawer";
 import Navbar from "@/components/Navbar";
@@ -28,6 +28,21 @@ const products: Product[] = [
 
 export default function Page() {
   const [openCart, setOpenCart] = useState(false);
+
+  // 🔥 cerrar carrito con ESC
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpenCart(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
 
   return (
     <ClientProviders>
