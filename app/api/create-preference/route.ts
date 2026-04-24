@@ -7,30 +7,34 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // 🔐 Cliente Mercado Pago
+    // Validación básica
+    if (!body.items || body.items.length === 0) {
+      return NextResponse.json(
+        { error: "No hay productos en el carrito" },
+        { status: 400 }
+      );
+    }
+
+    // Configurar cliente Mercado Pago
     const client = new MercadoPagoConfig({
       accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
     });
 
     const preference = new Preference(client);
 
-    // 🧾 Crear preferencia
+    // Crear preferencia (VERSIÓN SEGURA)
     const response = await preference.create({
       body: {
         items: body.items.map((item: any) => ({
-          title: item.name,
+          title: String(item.name),
           quantity: Number(item.quantity),
           unit_price: Number(item.price),
           currency_id: "CLP",
         })),
-
-        // 🔥 CLAVE para evitar 403 en producción
-        payer: {
-          email: "oscar.ramosh@gmail.com",
-        },
       },
     });
 
+    // Respuesta al frontend
     return NextResponse.json({
       init_point: response.init_point,
     });
@@ -39,7 +43,10 @@ export async function POST(req: Request) {
     console.error("🔥 ERROR MP:", JSON.stringify(error, null, 2));
 
     return NextResponse.json(
-      { error: "Error al crear preferencia" },
+      {
+        error: "Error al crear preferencia",
+        detail: error?.message || "Error desconocido",
+      },
       { status: 500 }
     );
   }
