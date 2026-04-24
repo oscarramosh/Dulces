@@ -14,23 +14,44 @@ function CheckoutContent() {
   const finalTotal = total + shipping;
 
   const handleCheckout = async () => {
-    const res = await fetch("/api/create-preference", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: cart,
-        shipping,
-        name,
-        address,
-      }),
-    });
+    console.log("CLICK PAGAR");
+    console.log("CART:", cart);
 
-    const data = await res.json();
+    // 🚨 validación básica
+    if (cart.length === 0) {
+      alert("Tu carrito está vacío");
+      return;
+    }
 
-    if (data.init_point) {
-      window.location.href = data.init_point;
+    if (!name || !address) {
+      alert("Completa tus datos");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/create-preference", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: cart, // 🔥 IMPORTANTE
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("RESPUESTA MP:", data);
+
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        alert("No se pudo iniciar el pago");
+      }
+
+    } catch (error) {
+      console.error("ERROR CHECKOUT:", error);
+      alert("Error en checkout");
     }
   };
 
@@ -42,6 +63,10 @@ function CheckoutContent() {
 
         {/* PRODUCTOS */}
         <div className="mb-6">
+          {cart.length === 0 && (
+            <p className="text-gray-500 text-sm">No hay productos</p>
+          )}
+
           {cart.map(item => (
             <div key={item.id} className="flex justify-between mb-2 text-sm">
               <span>{item.name} x{item.quantity}</span>
@@ -70,14 +95,14 @@ function CheckoutContent() {
         <div className="flex flex-col gap-3 mb-6">
           <input
             placeholder="Nombre"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg w-full"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <input
             placeholder="Dirección"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg w-full"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
@@ -92,7 +117,7 @@ function CheckoutContent() {
         {/* PAGAR */}
         <button
           onClick={handleCheckout}
-          className="w-full bg-amber-700 text-white py-3 rounded-xl hover:bg-amber-800 transition"
+          className="w-full bg-amber-700 text-white py-3 rounded-xl hover:bg-amber-800 transition active:scale-95"
         >
           Ir a pagar
         </button>
