@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
+import { CartItem } from "@/lib/types"; // ✅ IMPORTANTE
 
 export default function CartDrawer({
   open,
@@ -10,33 +11,6 @@ export default function CartDrawer({
   onClose: () => void;
 }) {
   const { cart, removeFromCart, updateQty, total } = useCart();
-
-  // 🔥 FUNCIÓN DE PAGO (Mercado Pago)
-  const handleCheckout = async () => {
-    try {
-      const res = await fetch("/api/create-preference", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ items: cart }),
-      });
-
-      const data = await res.json();
-
-      console.log("MP RESPONSE:", data);
-
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      } else {
-        alert("Error al iniciar el pago");
-      }
-
-    } catch (error) {
-      console.error("Error en checkout:", error);
-      alert("Error en checkout");
-    }
-  };
 
   return (
     <>
@@ -64,13 +38,14 @@ export default function CartDrawer({
 
           {/* LISTA */}
           <div className="flex-1 overflow-y-auto space-y-3">
+
             {cart.length === 0 && (
               <p className="text-gray-500">Tu carrito está vacío</p>
             )}
 
-            {cart.map(item => (
+            {cart.map((item: CartItem) => (
               <div key={item.id} className="flex gap-2">
-                
+
                 <img
                   src={item.image}
                   alt={item.name}
@@ -88,7 +63,7 @@ export default function CartDrawer({
                     type="number"
                     value={item.quantity}
                     min={1}
-                    onChange={e =>
+                    onChange={(e) =>
                       updateQty(item.id, Number(e.target.value))
                     }
                     className="w-12 border rounded text-xs mt-1"
@@ -103,6 +78,7 @@ export default function CartDrawer({
                 </button>
               </div>
             ))}
+
           </div>
 
           {/* FOOTER */}
@@ -114,7 +90,7 @@ export default function CartDrawer({
             </p>
 
             <button
-              onClick={() => window.location.href = "/checkout"}
+              onClick={() => (window.location.href = "/checkout")}
               disabled={cart.length === 0}
               className="w-full bg-amber-700 text-white py-2 rounded-lg mt-3 hover:bg-amber-800 transition disabled:bg-gray-300"
             >
