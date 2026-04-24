@@ -2,13 +2,14 @@
 
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
+import { CartItem } from "@/lib/types"; // ✅ IMPORTANTE
 
 export default function CheckoutPage() {
   const { cart, total } = useCart();
 
-  const [shipping, setShipping] = useState(3000);
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
+  const [shipping, setShipping] = useState<number>(3000);
+  const [name, setName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
   const finalTotal = total + shipping;
 
@@ -34,7 +35,7 @@ export default function CheckoutPage() {
         },
         body: JSON.stringify({
           items: cart,
-          shipping, // 🔥 ahora sí se envía
+          shipping,
         }),
       });
 
@@ -62,7 +63,11 @@ export default function CheckoutPage() {
 
         {/* PRODUCTOS */}
         <div className="mb-6">
-          {cart.map(item => (
+          {cart.length === 0 && (
+            <p className="text-gray-500 text-sm">No hay productos</p>
+          )}
+
+          {cart.map((item: CartItem) => (
             <div key={item.id} className="flex justify-between mb-2 text-sm">
               <span>{item.name} x{item.quantity}</span>
               <span>
@@ -78,6 +83,7 @@ export default function CheckoutPage() {
 
           <select
             className="w-full border p-3 rounded-lg"
+            value={shipping}
             onChange={(e) => setShipping(Number(e.target.value))}
           >
             <option value={3000}>Despacho normal ($3.000)</option>
