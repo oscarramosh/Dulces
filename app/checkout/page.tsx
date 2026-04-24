@@ -2,7 +2,7 @@
 
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
-import ClientProviders from "@/components/ClientProviders";
+
 
 function CheckoutContent() {
   const { cart, total } = useCart();
@@ -128,9 +128,5 @@ function CheckoutContent() {
 }
 
 export default function CheckoutPage() {
-  return (
-    <ClientProviders>
-      <CheckoutContent />
-    </ClientProviders>
-  );
+  return <CheckoutContent />;
 }

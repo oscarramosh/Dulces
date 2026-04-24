@@ -1,4 +1,6 @@
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -6,8 +8,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-[#fffaf3] text-gray-800 antialiased">
-        {children}
+      <body>
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
