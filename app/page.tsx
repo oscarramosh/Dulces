@@ -13,6 +13,7 @@ const products: Product[] = [
     name: "Alfajor de Maicena",
     price: 2500,
     image: "/alfajor.jpg",
+    images: ["/alfajor.jpg", "/alfajor2.jpg"],
     category: "alfajores",
     description: "Suave, relleno con manjar artesanal",
   },
@@ -21,6 +22,7 @@ const products: Product[] = [
     name: "Chilenitos",
     price: 3000,
     image: "/chilenitos.jpg",
+    images: ["/chilenitos.jpg", "/chilenitos2.jpg"],
     category: "chilenitos",
     description: "Crujientes y tradicionales",
   },
@@ -29,29 +31,21 @@ const products: Product[] = [
 export default function Page() {
   const [openCart, setOpenCart] = useState(false);
 
-  // 🔥 cerrar carrito con ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpenCart(false);
-      }
+      if (e.key === "Escape") setOpenCart(false);
     };
 
     window.addEventListener("keydown", handleEsc);
-
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
+    return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
   return (
     <ClientProviders>
       <main className="bg-[#fefaf6] min-h-screen">
 
-        {/* NAVBAR */}
         <Navbar onOpenCart={() => setOpenCart(true)} />
 
-        {/* HERO */}
         <section className="text-center py-20 px-4">
           <h1 className="text-5xl md:text-6xl font-serif text-amber-900 mb-4">
             Dulces de Curacaví
@@ -69,12 +63,10 @@ export default function Page() {
           </a>
         </section>
 
-        {/* CATÁLOGO */}
         <section id="catalogo" className="max-w-6xl mx-auto px-4 pb-20">
           <Catalog products={products} />
         </section>
 
-        {/* CARRITO */}
         <CartDrawer
           open={openCart}
           onClose={() => setOpenCart(false)}
