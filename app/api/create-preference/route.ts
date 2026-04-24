@@ -7,34 +7,42 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Validación básica
     if (!body.items || body.items.length === 0) {
       return NextResponse.json(
-        { error: "No hay productos en el carrito" },
+        { error: "Carrito vacío" },
         { status: 400 }
       );
     }
 
-    // Configurar cliente Mercado Pago
     const client = new MercadoPagoConfig({
       accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
     });
 
     const preference = new Preference(client);
 
-    // Crear preferencia (VERSIÓN SEGURA)
+    // 🔥 ITEMS + ENVÍO
+    const items = [
+      ...body.items.map((item: any) => ({
+        title: String(item.name),
+        quantity: Number(item.quantity),
+        unit_price: Number(item.price),
+        currency_id: "CLP",
+      })),
+
+      {
+        title: body.shipping === 0 ? "Retiro en tienda" : "Despacho",
+        quantity: 1,
+        unit_price: Number(body.shipping || 0),
+        currency_id: "CLP",
+      },
+    ];
+
     const response = await preference.create({
       body: {
-        items: body.items.map((item: any) => ({
-          title: String(item.name),
-          quantity: Number(item.quantity),
-          unit_price: Number(item.price),
-          currency_id: "CLP",
-        })),
+        items,
       },
     });
 
-    // Respuesta al frontend
     return NextResponse.json({
       init_point: response.init_point,
     });

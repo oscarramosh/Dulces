@@ -3,8 +3,7 @@
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 
-
-function CheckoutContent() {
+export default function CheckoutPage() {
   const { cart, total } = useCart();
 
   const [shipping, setShipping] = useState(3000);
@@ -14,10 +13,9 @@ function CheckoutContent() {
   const finalTotal = total + shipping;
 
   const handleCheckout = async () => {
-    console.log("CLICK PAGAR");
+    console.log("CHECKOUT");
     console.log("CART:", cart);
 
-    // 🚨 validación básica
     if (cart.length === 0) {
       alert("Tu carrito está vacío");
       return;
@@ -35,22 +33,23 @@ function CheckoutContent() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          items: cart, // 🔥 IMPORTANTE
+          items: cart,
+          shipping, // 🔥 ahora sí se envía
         }),
       });
 
       const data = await res.json();
 
-      console.log("RESPUESTA MP:", data);
+      console.log("MP:", data);
 
       if (data.init_point) {
         window.location.href = data.init_point;
       } else {
-        alert("No se pudo iniciar el pago");
+        alert("Error al iniciar el pago");
       }
 
     } catch (error) {
-      console.error("ERROR CHECKOUT:", error);
+      console.error(error);
       alert("Error en checkout");
     }
   };
@@ -63,10 +62,6 @@ function CheckoutContent() {
 
         {/* PRODUCTOS */}
         <div className="mb-6">
-          {cart.length === 0 && (
-            <p className="text-gray-500 text-sm">No hay productos</p>
-          )}
-
           {cart.map(item => (
             <div key={item.id} className="flex justify-between mb-2 text-sm">
               <span>{item.name} x{item.quantity}</span>
@@ -125,8 +120,4 @@ function CheckoutContent() {
       </div>
     </main>
   );
-}
-
-export default function CheckoutPage() {
-  return <CheckoutContent />;
 }
