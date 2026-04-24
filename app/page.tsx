@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import Catalog from "@/components/Catalog";
 import CartDrawer from "@/components/CartDrawer";
-import { CartProvider } from "@/context/CartContext";
+import Navbar from "@/components/Navbar";
+import ClientProviders from "@/components/ClientProviders";
 import { Product } from "@/lib/types";
 
 const products: Product[] = [
@@ -23,9 +27,14 @@ const products: Product[] = [
 ];
 
 export default function Page() {
+  const [openCart, setOpenCart] = useState(false);
+
   return (
-    <CartProvider>
+    <ClientProviders>
       <main className="bg-[#fefaf6] min-h-screen">
+
+        {/* NAVBAR */}
+        <Navbar onOpenCart={() => setOpenCart(true)} />
 
         {/* HERO */}
         <section className="text-center py-20 px-4">
@@ -50,8 +59,13 @@ export default function Page() {
           <Catalog products={products} />
         </section>
 
-        <CartDrawer />
+        {/* CARRITO */}
+        <CartDrawer
+          open={openCart}
+          onClose={() => setOpenCart(false)}
+        />
+
       </main>
-    </CartProvider>
+    </ClientProviders>
   );
 }
