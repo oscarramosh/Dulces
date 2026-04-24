@@ -5,6 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import ProductModal from "./ProductModal";
 
+
 export default function Catalog({ products }: { products: Product[] }) {
   const { addToCart } = useCart();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
