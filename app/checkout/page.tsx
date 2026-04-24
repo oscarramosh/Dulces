@@ -2,8 +2,9 @@
 
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
+import ClientProviders from "@/components/ClientProviders";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const { cart, total } = useCart();
 
   const [shipping, setShipping] = useState(3000);
@@ -37,9 +38,7 @@ export default function CheckoutPage() {
     <main className="min-h-screen bg-[#fefaf6] px-4 py-10">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow">
 
-        <h1 className="text-2xl font-serif mb-6">
-          Checkout
-        </h1>
+        <h1 className="text-2xl font-serif mb-6">Checkout</h1>
 
         {/* PRODUCTOS */}
         <div className="mb-6">
@@ -97,7 +96,16 @@ export default function CheckoutPage() {
         >
           Ir a pagar
         </button>
+
       </div>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <ClientProviders>
+      <CheckoutContent />
+    </ClientProviders>
   );
 }
