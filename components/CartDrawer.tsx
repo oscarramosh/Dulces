@@ -114,7 +114,7 @@ export default function CartDrawer({
             </p>
 
             <button
-              onClick={handleCheckout}
+              onClick={() => window.location.href = "/checkout"}
               disabled={cart.length === 0}
               className="w-full bg-amber-700 text-white py-2 rounded-lg mt-3 hover:bg-amber-800 transition disabled:bg-gray-300"
             >
